@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unstop Igniters Club – ITER | Ignite The Future</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@300;400;600&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root {
+    --primary-color: #00f7ff;
+    --secondary-color: #ff2a6d;
+    --bg-color: #010409;
+    --surface-color: #0d1117;
+    --border-color: rgba(0, 247, 255, 0.2);
+    --text-color: #e6edf3;
+    --text-muted: #8b949e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-color);
+    background: var(--bg-color);
+    overflow-x: hidden;
+  }
+
+  #bg-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: -1;
+  }
+  
+  .container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* --- NAVIGATION --- */
+  nav {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    padding: 1rem 0;
+    z-index: 1000;
+    background: rgba(1, 4, 9, 0.7);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
+  }
+  .nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .nav-logo img { height: 40px; width: auto; }
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a {
+    font-family: 'Roboto Mono', monospace;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s, text-shadow 0.3s;
+  }
+  .nav-links a:hover, .nav-links a.active {
+    color: var(--primary-color);
+    text-shadow: 0 0 10px var(--primary-color);
+  }
+  .menu-toggle { display: none; }
+
+
+  /* --- GENERAL SECTION STYLING --- */
+  section {
+    padding: 8rem 0;
+    overflow: hidden;
+  }
+  .section-title {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+    text-transform: uppercase;
+  }
+  .section-subtitle {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 4rem auto;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    line-height: 1.7;
+  }
+  
+  /* --- HERO SECTION --- */
+  #home {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    padding-bottom: 5rem;
+  }
+  #home h1 {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(3rem, 10vw, 8rem);
+    text-transform: uppercase;
+    color: #fff;
+    line-height: 1;
+    animation: glitch 1.5s infinite;
+  }
+  .scroll-down {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+    color: var(--primary-color);
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);} 40% {transform: translateX(-50%) translateY(-15px);} 60% {transform: translateX(-50%) translateY(-7px);} }
+  
+  @keyframes glitch { 2%,64%{ transform: translate(2px,0) skew(0deg); } 4%,60%{ transform: translate(-2px,0) skew(0deg); } 62%{ transform: translate(0,0) skew(5deg); } }
+  #home h1:before, #home h1:after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+  #home h1:before { left: 2px; text-shadow: -2px 0 var(--secondary-color); clip: rect(44px, 450px, 56px, 0); animation: glitch-anim 5s infinite linear alternate-reverse; }
+  #home h1:after { left: -2px; text-shadow: -2px 0 var(--primary-color), 2px 2px var(--secondary-color); clip: rect(86px, 450px, 90px, 0); animation: glitch-anim-2 3s infinite linear alternate-reverse; }
+  @keyframes glitch-anim{ from{ clip:rect(2px, 9999px, 10px, 0) } to{ clip:rect(80px, 9999px, 92px, 0) } }
+  @keyframes glitch-anim-2{ from{ clip:rect(70px, 9999px, 85px, 0) } to{ clip:rect(20px, 9999px, 60px, 0) } }
+
+  .typewriter { font-family: 'Roboto Mono', monospace; font-size: 1.2rem; color: var(--primary-color); margin-top: 1.5rem; display: inline-block; }
+  
+  /* --- OBJECTIVE SECTION --- */
+  .objective-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 3rem;
+  }
+  .objective-text h3 {
+      font-family: 'Anton', sans-serif;
+      font-size: 2rem;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+  }
+  .objective-text p {
+      color: var(--text-muted);
+      line-height: 1.8;
+  }
+  .objective-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+  .objective-visual img { max-width: 100%; opacity: 0.8; }
+  
+  /* --- PERKS SECTION --- */
+  #perks .fire { color: #ff9800; text-shadow: 0 0 15px #ff9800; }
+  .perks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+  }
+  .perk-card {
+    background: var(--surface-color);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    position: relative;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    transition: transform 0.4s ease;
+    background-image: 
+        repeating-linear-gradient(0deg, rgba(0,247,255,0.1), rgba(0,247,255,0.1) 1px, transparent 1px, transparent 20px),
+        repeating-linear-gradient(90deg, rgba(0,247,255,0.1), rgba(0,247,255,0.1) 1px, transparent 1px, transparent 20px);
+  }
+  .perk-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border-radius: inherit;
+      background: radial-gradient(
+          circle at var(--x, 50%) var(--y, 50%),
+          rgba(0, 247, 255, 0.35),
+          transparent 40%
+      );
+      opacity: 0;
+      transition: opacity 0.4s ease;
+  }
+  .perk-card:hover {
+      transform: perspective(1500px) rotateX(5deg) rotateY(-5deg) scale(1.05);
+  }
+  .perk-card:hover::before {
+      opacity: 1;
+  }
+  .perk-card .icon, .perk-card h3, .perk-card p {
+    position: relative; z-index: 2;
+  }
+  .perk-card .icon {
+    font-size: 3rem; margin-bottom: 1.5rem; transition: all 0.3s;
+  }
+  .perk-card h3 {
+    font-family: 'Anton', sans-serif;
+    font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--primary-color);
+  }
+  .perk-card.hackathons .icon { color: #00f7ff; }
+  .perk-card.quizzes .icon { color: #28a745; }
+  .perk-card.dsa .icon { color: #ff2a6d; }
+  .perk-card.leaderboard .icon { color: #ffc107; }
+  .perk-card.goodies .icon { color: #9c27b0; }
+  .perk-card.prep-kits .icon { color: #17a2b8; }
+  
+  .cta-banner {
+      display: block;
+      margin: 4rem 0;
+      padding: 3rem 2rem;
+      border: 1px solid #ff9800;
+      border-radius: 10px;
+      text-align: center;
+      text-decoration: none;
+      background: radial-gradient(ellipse at center, rgba(255, 152, 0, 0.15) 0%, transparent 70%), var(--surface-color);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .cta-banner:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 25px rgba(255, 152, 0, 0.5);
+  }
+  .cta-banner h3 {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: #ff9800;
+      text-shadow: 0 0 10px #ff9800, 0 0 20px var(--secondary-color);
+      animation: pulse 2s infinite alternate;
+      text-transform: uppercase;
+  }
+  @keyframes pulse {
+      from { opacity: 0.8; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+  }
+
+
+  /* --- JOIN US SECTION --- */
+  #join { background: var(--surface-color); text-align: center; }
+  .join-links { display: flex; justify-content: center; gap: 2rem; margin-top: 2rem; flex-wrap: wrap; }
+  .join-links a { color: var(--text-color); font-size: 3rem; transition: color 0.3s, transform 0.3s; }
+  .join-links a:hover { color: var(--primary-color); transform: scale(1.1); text-shadow: 0 0 15px var(--primary-color); }
+
+  /* --- FOOTER --- */
+  footer { padding: 3rem 0; border-top: 1px solid var(--border-color); text-align: center; }
+
+  /* --- ANIMATIONS & RESPONSIVENESS --- */
+  .reveal { opacity: 0; transform: translateY(50px); transition: opacity 1s, transform 1s; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .perk-card { transition-delay: calc(0.1s * var(--i)); }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .menu-toggle { display: block; }
+    .objective-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+
+<nav>
+  <div class="container nav-container">
+    <a href="#home" class="nav-logo"><img src="./logo/logo.svg" alt="Logo"></a>
+    <div class="nav-links">
+      <a href="#home" class="active">Home</a>
+      <a href="#objective">Objective</a>
+      <a href="#perks">Perks</a>
+      <a href="#join">Join</a>
+    </div>
+    <div class="menu-toggle">
+        <!-- Hamburger icon for mobile -->
+    </div>
+  </div>
+</nav>
+
+<!-- HERO SECTION -->
+<section id="home">
+  <div class="container">
+    <h1 data-text="Ignite the Spark">Ignite the Spark</h1>
+    <p class="typewriter"></p>
+  </div>
+  <a href="#objective" class="scroll-down"><i class="fas fa-chevron-down"></i></a>
+</section>
+
+<!-- OBJECTIVE SECTION -->
+<section id="objective" class="reveal">
+    <div class="container objective-grid">
+        <div class="objective-text">
+            <h2 class="section-title" style="text-align: left; margin: 0 0 1.5rem 0;">Our Core Objective</h2>
+            <h3>From Classroom to Career</h3>
+            <p>Our mission is to forge a community where theoretical knowledge transforms into practical, career-defining skills. We provide a high-octane environment for students to collaborate, innovate, and build tangible projects, bridging the critical gap between academic learning and industry demands.</p>
+        </div>
+        <div class="objective-visual">
+            <img src="./logo/campus+2-removebg-preview.png" alt="Futuristic neural network graphic">
+        </div>
+    </div>
+</section>
+
+<!-- PERKS SECTION -->
+<section id="perks" class="reveal">
+  <div class="container">
+    <h2 class="section-title">Club Perks <span class="fire"><i class="fas fa-fire"></i></span></h2>
+    <p class="section-subtitle">Joining the Igniters Club is your launchpad for a successful tech career. Here's a look at the exclusive opportunities and benefits waiting for you.</p>
+    
+    <div class="grid perks-grid">
+      <div class="perk-card hackathons reveal" style="--i:1;">
+        <div class="icon"><i class="fas fa-laptop-code"></i></div>
+        <h3>Quarterly Hackathons</h3>
+        <p>Collaborate with MNCs, solve real-world problems, and push your limits in our high-stakes coding events.</p>
+      </div>
+      <div class="perk-card quizzes reveal" style="--i:2;">
+        <div class="icon"><i class="fas fa-question-circle"></i></div>
+        <h3>Weekly Tech Quizzes</h3>
+        <p>Stay sharp and on top of the latest trends with our engaging weekly tech challenges.</p>
+      </div>
+       <div class="perk-card dsa reveal" style="--i:3;">
+        <div class="icon"><i class="fas fa-brain"></i></div>
+        <h3>Monthly DSA Quizzes</h3>
+        <p>Level up your problem-solving skills with our curated Data Structures & Algorithms challenges.</p>
+      </div>
+    </div>
+
+    <a href="#join" class="cta-banner reveal">
+        <h3>Ignite Your Passion 🔥</h3>
+    </a>
+
+     <div class="grid perks-grid">
+      <div class="perk-card leaderboard reveal" style="--i:4;">
+        <div class="icon"><i class="fas fa-chart-line"></i></div>
+        <h3>Live Leaderboard</h3>
+        <p>Track your progress, earn bragging rights, and see how you stack up against your peers.</p>
+      </div>
+      <div class="perk-card goodies reveal" style="--i:5;">
+        <div class="icon"><i class="fas fa-gift"></i></div>
+        <h3>Awesome Goodies</h3>
+        <p>Win exclusive merchandise, tech gadgets, and more as a top performer in our quarterly events.</p>
+      </div>
+       <div class="perk-card prep-kits reveal" style="--i:6;">
+        <div class="icon"><i class="fas fa-file-alt"></i></div>
+        <h3>Company Prep Kits</h3>
+        <p>Get exclusive access to prep materials and guides to boost your chances in campus placements.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JOIN US SECTION -->
+<section id="join" class="reveal">
+  <div class="container">
+    <h2 class="section-title">Become an Igniter</h2>
+    <p class="section-subtitle">Ready to join a community of innovators and builders? Follow our channels, stay updated, and get involved in our next big event.</p>
+    <div class="join-links">
+      <a href="https://chat.whatsapp.com/JTjiMIdlqBF3oRuraH95YT?mode=ems_copy_t" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      <a href="https://www.linkedin.com/company/unstop-igniters-club-iter/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+      <a href="https://www.instagram.com/unstop.iter?igsh=Z2pqY3U3NHUxNDBo" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <p>&copy; 2024 Unstop Igniters Club — ITER. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<script>
+  // --- PARTICLE CONSTELLATION BACKGROUND ---
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  let particlesArray;
+  let mouse = { x: null, y: null, radius: (canvas.height/120) * (canvas.width/120) };
+
+  window.addEventListener('mousemove', (event) => { mouse.x = event.x; mouse.y = event.y; });
+
+  class Particle {
+      constructor(x, y, directionX, directionY, size, color) { this.x = x; this.y = y; this.directionX = directionX; this.directionY = directionY; this.size = size; this.color = color; }
+      draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false); ctx.fillStyle = 'rgba(0, 247, 255, 0.5)'; ctx.fill(); }
+      update() { if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX; if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY; let dx = mouse.x - this.x; let dy = mouse.y - this.y; let distance = Math.sqrt(dx*dx + dy*dy); if(distance < mouse.radius + this.size){ if(mouse.x < this.x && this.x < canvas.width - this.size * 10) this.x += 3; if(mouse.x > this.x && this.x > this.size * 10) this.x -= 3; if(mouse.y < this.y && this.y < canvas.height - this.size * 10) this.y += 3; if(mouse.y > this.y && this.y > this.size * 10) this.y -= 3; } this.x += this.directionX; this.y += this.directionY; this.draw(); }
+  }
+
+  function connect() {
+      let opacityValue = 1;
+      for (let a = 0; a < particlesArray.length; a++) {
+          for (let b = a; b < particlesArray.length; b++) {
+              let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+              if (distance < (canvas.width/7) * (canvas.height/7)) {
+                  opacityValue = 1 - (distance/20000);
+                  ctx.strokeStyle = `rgba(0, 247, 255, ${opacityValue})`;
+                  ctx.lineWidth = 1;
+                  ctx.beginPath();
+                  ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                  ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                  ctx.stroke();
+              }
+          }
+      }
+  }
+
+  function init() { particlesArray = []; let numberOfParticles = (canvas.height * canvas.width) / 9000; for (let i = 0; i < numberOfParticles*1.5; i++) { let size = (Math.random() * 2) + 1; let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2); let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2); let directionX = (Math.random() * 0.4) - 0.2; let directionY = (Math.random() * 0.4) - 0.2; particlesArray.push(new Particle(x, y, directionX, directionY, size, 'white')); } }
+  function animate() { requestAnimationFrame(animate); ctx.clearRect(0, 0, innerWidth, innerHeight); for (let i = 0; i < particlesArray.length; i++) { particlesArray[i].update(); } connect(); }
+  window.addEventListener('resize', () => { canvas.width = innerWidth; canvas.height = innerHeight; mouse.radius = (canvas.height/120) * (canvas.width/120); init(); });
+  window.addEventListener('mouseout', () => { mouse.x = undefined; mouse.y = undefined; });
+  
+  init(); animate();
+
+  // --- INTERACTIVE PERK CARD GLOW ---
+  const cards = document.querySelectorAll('.perk-card');
+  cards.forEach(card => {
+      card.addEventListener('mousemove', e => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          card.style.setProperty('--x', `${x}px`);
+          card.style.setProperty('--y', `${y}px`);
+      });
+  });
+
+  // --- TYPEWRITER EFFECT ---
+  const typewriterElement = document.querySelector('.typewriter'); const text = "A community for builders, thinkers, and innovators."; let index = 0; function type() { if (index < text.length) { typewriterElement.textContent += text.charAt(index); index++; setTimeout(type, 50); } } setTimeout(type, 1000);
+
+  // --- SCROLL-BASED ANIMATIONS ---
+  const revealElements = document.querySelectorAll('.reveal'); const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); } }); }, { threshold: 0.1 }); revealElements.forEach(el => observer.observe(el));
+
+  // --- NAVBAR ACTIVE LINK HIGHLIGHTER ---
+  const sections = document.querySelectorAll('section'); const navLinks = document.querySelectorAll('nav .nav-links a'); window.addEventListener('scroll', () => { let current = ''; sections.forEach(section => { const sectionTop = section.offsetTop; if (pageYOffset >= sectionTop - 70) { current = section.getAttribute('id'); } }); navLinks.forEach(a => { a.classList.remove('active'); if (a.getAttribute('href').substring(1) === current) { a.classList.add('active'); } }); });
+
+</script>
+</body>
+</html>
